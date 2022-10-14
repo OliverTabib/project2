@@ -14,13 +14,29 @@ package project2;
 
 public class TreeSpeciesList {
 
+
+
 	public TreeSpeciesList() {
 
 	}
 
+	/*
+	 * @returns a list of species whose common name contains keyword as a substring
+	 * case insensitive
+	 * @throws IllegalArgumentException if called with null arg
+	 * @returns null if there are no TreeSpecies objects matching the keyword
+	 */
 	public TreeSpeciesList getByCommonName (String keyword) {
-		return null;
-
-
+		return null; // TODO: implement this method
+	}
+	
+	/*
+	 * @returns list of species whose Latin name contains keyword as substring
+	 * case insensitive
+	 * @throws IllegalArguementException if called with null arg
+	 * @returns null if there are no TreeSpecies objects matching the keyword
+	 */
+	public TreeSpeciesList getByLatinName(String keyword) {
+		return null; // TODO: implement this method
 	}
 }
