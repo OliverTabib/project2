@@ -14,23 +14,38 @@
 package project2;
 
 public class TreeSpecies {
+	private String commonName;
+	private String latinName;
 	
 	/*
-	Both names are, possibly empty, strings. They cannot be null. '
+	Both names are possibly empty strings. They cannot be null. '
 	If this constructor is called with a null argument, it should throw 
 	an instance of IllegalArgumentException with an appropriate error message.
 	 */
 	
 	public TreeSpecies(String commonName, String latinName) {
-		
+		if( commonName == null || latinName == null ) {
+			throw new IllegalArgumentException( "A null arguement was passed" );
+		}
+		this.commonName = commonName;
+		this.latinName = latinName;
 	}
 
 	
 	@Override
 	public boolean equals(Object obj) {
-		// TODO Implement this equals method
-		return false;
+		TreeSpecies other = ( TreeSpecies ) obj;
 		
+		String thisCommonName = this.commonName.toLowerCase();
+		String thisLatinName = this.latinName.toLowerCase();
+		String otherCommonName = other.commonName.toLowerCase();
+		String otherLatinName = other.latinName.toLowerCase();
+		
+		if( ( thisCommonName.equals( otherCommonName )) && 
+				( thisLatinName.equals( otherLatinName ))) {
+			return true;
+		}
+		return false;
 	}
 	
 }

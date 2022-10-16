@@ -20,7 +20,12 @@ import java.io.FileReader;
 
 public class NYCStreetTrees {
 	public static void main( String[] args ) throws FileNotFoundException {
-		FileReader f = new FileReader("C:\\Users\\ojtab\\Desktop\\CS_102\\project2\\src\\project2\\2015_NYC_Tree_Census.csv");
+		FileReader f = new FileReader("C:\\Users\\ojtab\\Desktop\\CS_102\\project2\\src\\project2"
+				+ "\\2015_NYC_Tree_Census.csv");
+		TreeSpecies s = new TreeSpecies("","");
+		Tree t = new Tree(0, s);
+		t.setZipcode(0);
+		System.out.println(t.getZipcode());
 	}
 
 }
