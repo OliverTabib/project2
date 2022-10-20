@@ -67,10 +67,12 @@ public class Tree implements Comparable<Tree>{
 		if( species == null ) throw new IllegalArgumentException( "Species "
 				+ "must not be null" );
 
-
 		this.tree_id = treeID;
 		this.species = species;
 
+		// Get species names form TreeSpecies.java
+		this.spc_common = species.getCommonName().toLowerCase();
+		this.spc_latin = species.getLatinName().toLowerCase();
 	}
 
 	public int getTree_id() {
@@ -128,7 +130,7 @@ public class Tree implements Comparable<Tree>{
 		// Input Validation:
 		if( spc_latin == null ) throw new IllegalArgumentException( "Latin Name "
 				+ "is null" );
-		this.spc_latin = spc_latin;
+		this.spc_latin = spc_latin.toLowerCase();
 	}
 
 	public String getSpc_common() {
@@ -139,7 +141,7 @@ public class Tree implements Comparable<Tree>{
 		// Input Validation:
 		if( spc_common == null ) throw new IllegalArgumentException( "Common Name "
 				+ "is null");
-		this.spc_common = spc_common;
+		this.spc_common = spc_common.toLowerCase();
 	}
 
 	public int getZipcode() {
@@ -152,7 +154,8 @@ public class Tree implements Comparable<Tree>{
 			throw new IllegalArgumentException( "Zipcode must be between 0 "
 					+ "and 99999" );
 		}
-		int zip;
+		this.zipcode = zipcode;
+		/*
 		// Handling trailing zeros:
 		String stringZip = Integer.toString( zipcode );
 		if( stringZip.length() < 5 ) {
@@ -166,6 +169,7 @@ public class Tree implements Comparable<Tree>{
 		}
 		System.out.println(zipcode);
 		//this.zipcode = zipcode;
+		 */
 	}
 
 	public String getBoroName() {
@@ -173,6 +177,17 @@ public class Tree implements Comparable<Tree>{
 	}
 
 	public void setBoroName(String boroName) {
+		// Input Validation:
+		if( !(boroName == null) ) {
+			boroName = boroName.toLowerCase();
+		}
+
+		if( !( boroName == null  || boroName.equals( "manhattan" ) || 
+				boroName.equals( "bronx" ) || boroName.equals( "brooklyn" )
+				|| boroName.equals( "queens" ) || boroName.equals("staten island")
+				)) {
+			throw new IllegalArgumentException( "Invalid Borough Argument" );
+		}
 		this.boroName = boroName;
 	}
 
@@ -208,16 +223,52 @@ public class Tree implements Comparable<Tree>{
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		// TODO Implement equals method
+		if( !(obj instanceof Tree ) ) {
+			throw new IllegalArgumentException("Must compare two Tree objects");
+		}
+		Tree t = (Tree) obj;
+		int thisTreeID = this.getTree_id();
+		int otherTreeID = t.getTree_id();
 
+		String thisLatinName = this.getSpc_latin();
+		String otherLatinName = t.getSpc_latin();
+
+		String thisCommonName = this.getSpc_common();
+		String otherCommonName = t.getSpc_common();
+
+		if( thisTreeID == otherTreeID && ( thisLatinName.equals(otherLatinName) )
+				&& ( thisCommonName.equals(otherCommonName) )) {
+			return true;
+		}
 		return false;
 
 	}
 
 	@Override
 	public int compareTo(Tree o) {
-		// TODO Implement compareTo (see Comparison in JavaDocs)
-		return 0;
+		int val = 0;
+
+		String thisCommonName = this.getSpc_common();
+		String otherCommonName = o.getSpc_common();
+
+		// If the two Tree objects have the same common name
+		// use the ID number to compare
+		if( this.getSpc_common().equals(o.getSpc_common() )) {
+			if( this.tree_id > o.getTree_id() ) { val = 1; }
+			else if( this.getTree_id() < o.getTree_id() ) { val = -1; }
+			else { val = 0; } // Same common name and ID
+		}
+		else {
+			val = thisCommonName.compareTo(otherCommonName);
+		}
+		return val;
+	}
+
+	public String capFirstLetter(String str) {
+		if(str == null) return str;
+		if(str.length() <= 1) return str;
+		String cap = str.substring(0,1).toUpperCase() + str.substring(1);
+		return cap;
 	}
 
 	@Override
@@ -225,7 +276,30 @@ public class Tree implements Comparable<Tree>{
 		// TODO Implement a toString method that is a meaningful representation
 		// of the object on which it is called. 
 
-		return null;
+		String title = "Information for " + capFirstLetter( this.getSpc_common() ) 
+		+ " (ID: " + this.getTree_id() + ")" + " Tree:";
+		
+		String latin = "\n  Latin:\t" + capFirstLetter( this.getSpc_latin() );
+		String status = "\n  Status:\t" + capFirstLetter( this.getStatus() );
+		String health = "\n  Health:\t" + capFirstLetter( this.getHealth() );
+		String zip = Integer.toString( this.getZipcode() );
+		
+		// Handling trailing zeros of zipcode:
+		if(zip.length() < 5) {
+			StringBuilder sb = new StringBuilder();
+			for( int i = 0; i < (5 - zip.length() ); i++ ) {
+				sb.append( "0" );
+			}
+			sb.append( zip );
+			zip = sb.toString();
+		}
+		
+		String zipcode = "\n  Zipcode:\t" + zip;
+		String boro = "\n  Borough:\t" + capFirstLetter( this.getBoroName() );
+
+
+		String s = title + latin + status + health + zipcode + boro;		
+		return s;
 
 	}
 

@@ -14,7 +14,28 @@ The class needs to provide the default constructor that creates an empty list.
 
 package project2;
 
-public class TreeList {
+import java.util.Iterator;
+
+
+public class TreeList{
+	public int size;
+	// Head of list
+	Node head;
+	Node tail;
+
+	// Nested node class:
+	static class Node {
+		Tree data;
+		Node next;
+
+		// Node constructor:
+		Node(Tree d){
+			data = d;
+			next = null;
+		}
+	}
+
+
 
 	public TreeList() {
 
@@ -25,14 +46,26 @@ public class TreeList {
 	  @throws IllegalArgumentException if the specified reference is null
 	 */
 	public void add(Tree tree) {
-		// TODO: implement this method
+		Node newNode = new Node(tree);
+		if(this.head == null) {
+			this.head = newNode;
+		}
+		else {
+			// Traverse to last node, insert
+			Node last = this.head;
+			while( last.next != null ) {
+				last = last.next;
+			}
+			last.next = newNode;
+		}
+		size++;
 	}
 
 	/*
 	  @returns the total number of Tree objects stored in the list
 	 */
 	public int getTotalNumberOfTrees() {
-		return -1; // TODO: implement this method
+		return size; // TODO: implement this method
 	}
 
 	/*
@@ -42,7 +75,21 @@ public class TreeList {
 	  @returns 0 if called with non-existent species
 	 */
 	public int getCountByCommonName( String speciesName ) {
-		return -1; // TODO: implement this method
+		speciesName = speciesName.toLowerCase();
+
+		Node n = this.head;
+		int count = 0;
+
+		while(n.next != null) {
+			if( n.data.getSpc_common().equals(speciesName) ) {
+				count++;
+			}
+			n = n.next;
+		}
+		if( n.data.getSpc_common().equals(speciesName) ){
+			count++;
+		}
+		return count;
 	}
 
 
@@ -53,7 +100,21 @@ public class TreeList {
 	  @returns 0 if called with non-existent species
 	 */
 	public int getCountByLatinName(String speciesName ) {
-		return -1; // TODO: implement this method
+		speciesName = speciesName.toLowerCase();
+
+		Node n = this.head;
+		int count = 0;
+
+		while(n.next != null) {
+			if( n.data.getSpc_latin().equals(speciesName) ) {
+				count++;
+			}
+			n = n.next;
+		}
+		if( n.data.getSpc_latin().equals(speciesName) ){
+			count++;
+		}
+		return count;
 	}
 
 	/*
@@ -63,7 +124,21 @@ public class TreeList {
 	 @returns zero if called with non existent boro or species
 	 */
 	public int getCountByBorough( String boroName ) {
-		return -1; // TODO: implement
+		boroName = boroName.toLowerCase();
+
+		Node n = this.head;
+		int count = 0;
+
+		while(n.next != null) {
+			if( n.data.getBoroName().equals(boroName) ) {
+				count++;
+			}
+			n = n.next;
+		}
+		if( n.data.getBoroName().equals(boroName) ){
+			count++;
+		}
+		return count;
 	}
 
 	/*
@@ -73,9 +148,28 @@ public class TreeList {
 	 @returns 0 if called with non-existent boro name or species name
 	 */
 	public int getCountByCommonNameBorough( String speciesName, String boroName ) {
-		return -1; //TODO: implement
+		boroName = boroName.toLowerCase();
+		speciesName = speciesName.toLowerCase();
+
+		Node n = this.head;
+		int count = 0;
+
+		while(n.next != null) {
+			if( n.data.getBoroName().equals(boroName) ) {
+				if( n.data.getSpc_common().equals(speciesName) ) {
+					count++;
+				}
+			}
+			n = n.next;
+		}
+		if( n.data.getBoroName().equals(boroName) ){
+			if( n.data.getSpc_common().equals(speciesName) ) {
+				count++;
+			}
+		}
+		return count;
 	}
-	
+
 	/*
 	 @returns the number of Tree objects in the list whose Latin name is the same 
 	 as the given speciesName and which are located in the borough boroName.
@@ -83,15 +177,30 @@ public class TreeList {
 	 @returns 0 if called with non-existent boro name or species name
 	 */
 	public int getCountByLatinNameBorough( String speciesName, String boroName ) {
-		return -1; //TODO: implement
+		boroName = boroName.toLowerCase();
+		speciesName = speciesName.toLowerCase();
+
+		Node n = this.head;
+		int count = 0;
+
+		while(n.next != null) {
+			if( n.data.getBoroName().equals(boroName) ) {
+				if( n.data.getSpc_latin().equals(speciesName) ) {
+					count++;
+				}
+			}
+			n = n.next;
+		}
+		if( n.data.getBoroName().equals(boroName) ){
+			if( n.data.getSpc_latin().equals(speciesName )) {
+				count++;
+			}
+		}
+		return count;
 	}
-	
-	@Override
-	public String toString() {
-		return null; //TODO: implement
-		
-	}
-	
-	
+
+
+
+
 
 }

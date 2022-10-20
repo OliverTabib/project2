@@ -12,9 +12,9 @@
 
 package project2;
 
-public class TreeSpeciesList {
+import java.util.ArrayList;
 
-
+public class TreeSpeciesList extends ArrayList<TreeSpecies>{
 
 	public TreeSpeciesList() {
 
@@ -27,6 +27,9 @@ public class TreeSpeciesList {
 	 * @returns null if there are no TreeSpecies objects matching the keyword
 	 */
 	public TreeSpeciesList getByCommonName (String keyword) {
+		if( keyword == null) {
+			throw new IllegalArgumentException("Keyword is null");
+		}
 		return null; // TODO: implement this method
 	}
 	
@@ -37,6 +40,9 @@ public class TreeSpeciesList {
 	 * @returns null if there are no TreeSpecies objects matching the keyword
 	 */
 	public TreeSpeciesList getByLatinName(String keyword) {
+		if( keyword == null) {
+			throw new IllegalArgumentException("Keyword is null");
+		}
 		return null; // TODO: implement this method
 	}
 }
