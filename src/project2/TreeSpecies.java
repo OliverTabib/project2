@@ -22,7 +22,6 @@ public class TreeSpecies {
 	If this constructor is called with a null argument, it should throw 
 	an instance of IllegalArgumentException with an appropriate error message.
 	 */
-
 	public TreeSpecies(String commonName, String latinName) {
 		if( commonName == null || latinName == null ) {
 			throw new IllegalArgumentException( "A null arguement was passed" );

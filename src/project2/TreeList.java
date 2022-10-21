@@ -130,12 +130,12 @@ public class TreeList{
 		int count = 0;
 
 		while(n.next != null) {
-			if( n.data.getBoroName().equals(boroName) ) {
+			if( n.data.getBoroname().equals(boroName) ) {
 				count++;
 			}
 			n = n.next;
 		}
-		if( n.data.getBoroName().equals(boroName) ){
+		if( n.data.getBoroname().equals(boroName) ){
 			count++;
 		}
 		return count;
@@ -155,14 +155,14 @@ public class TreeList{
 		int count = 0;
 
 		while(n.next != null) {
-			if( n.data.getBoroName().equals(boroName) ) {
+			if( n.data.getBoroname().equals(boroName) ) {
 				if( n.data.getSpc_common().equals(speciesName) ) {
 					count++;
 				}
 			}
 			n = n.next;
 		}
-		if( n.data.getBoroName().equals(boroName) ){
+		if( n.data.getBoroname().equals(boroName) ){
 			if( n.data.getSpc_common().equals(speciesName) ) {
 				count++;
 			}
@@ -184,14 +184,14 @@ public class TreeList{
 		int count = 0;
 
 		while(n.next != null) {
-			if( n.data.getBoroName().equals(boroName) ) {
+			if( n.data.getBoroname().equals(boroName) ) {
 				if( n.data.getSpc_latin().equals(speciesName) ) {
 					count++;
 				}
 			}
 			n = n.next;
 		}
-		if( n.data.getBoroName().equals(boroName) ){
+		if( n.data.getBoroname().equals(boroName) ){
 			if( n.data.getSpc_latin().equals(speciesName )) {
 				count++;
 			}

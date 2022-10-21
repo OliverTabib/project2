@@ -15,21 +15,26 @@
 package project2;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
-
+import java.lang.Object;
 import project2.TreeList.Node;
 
 public class NYCStreetTrees {
 	public static void main( String[] args ) throws IOException {
-
+		
 		String path = "C:\\Users\\ojtab\\Desktop\\CS_102\\project2\\src\\project2"
 				+ "\\test.csv";
+		//		String path = "C:\\Users\\ojtab\\Desktop\\CS_102\\project2\\src\\project2"
+		//				+ "\\2015_NYC_Tree_Census.csv";
 
-		String fileString = fileToString(path);
-		TreeList tl =  stringToTreeList(fileString);
+		Tree t = new Tree(1, new TreeSpecies("a","a"));
+		t.setBoroname("manhattan");
+		TreeList tl =  fileToTreeList(path);
 
 		String inputStr = "Enter the tree species to learn more about it"
 				+ " (\"quit\" to stop):";
@@ -68,7 +73,7 @@ public class NYCStreetTrees {
 		int[] arr = {0,0,0,0,0}; // Manhattan, BK, Staten Island, Queens, Bronx
 
 		while( n.next != null ) {
-			String boro = n.data.getBoroName();
+			String boro = n.data.getBoroname();
 			String specieC = n.data.getSpc_common();
 			switch(boro) {
 			case "manhattan":
@@ -99,7 +104,7 @@ public class NYCStreetTrees {
 			}
 			n = n.next;
 		}
-		String boro = n.data.getBoroName();
+		String boro = n.data.getBoroname();
 		String specieC = n.data.getSpc_common();
 		switch(boro) {
 		case "manhattan":
@@ -137,7 +142,7 @@ public class NYCStreetTrees {
 		int[] arr = {0,0,0,0,0}; // Manhattan, BK, Staten Island, Queens, Bronx
 
 		while( n.next != null ) {
-			String boro = n.data.getBoroName();
+			String boro = n.data.getBoroname();
 
 			switch(boro) {
 			case "manhattan":
@@ -158,7 +163,7 @@ public class NYCStreetTrees {
 			}
 			n = n.next;
 		}
-		String boro = n.data.getBoroName();
+		String boro = n.data.getBoroname();
 		switch(boro) {
 		case "manhattan":
 			arr[0]++;
@@ -182,7 +187,7 @@ public class NYCStreetTrees {
 	public static void displayPopularity( String species, TreeList tl ) {
 		int[] totals = popPerBoro(tl);
 		int[] totalPerBoro = popPerBoroPerSpecie(tl, species);
-		
+
 		int totalTreeSpecie = totalPopOfSpecies(tl, species);
 		String totalTreeSpecies = Integer.toString(totalTreeSpecie);
 		String totalTrees = Integer.toString(tl.size);
@@ -203,22 +208,22 @@ public class NYCStreetTrees {
 		float perBX = ((float)totalS_BX / totalBX) * 100;
 
 
-		
+
 
 		// Display percentages to user:
 		System.out.println("Popularity in the city: ");
-		System.out.printf("%-10s %-5s %-4s %6.2f%%\n", "\tNYC", ":" ,"(" + totalTreeSpecies +
+		System.out.printf("%-15s %-5s %-4s %6.2f%%\n", "\tNYC", ":" ,"(" + totalTreeSpecies +
 				")" + totalTrees, totalPercentCity );
 
-		System.out.printf("%-10s %-5s %-4s %6.2f%%\n", "\tManhattan", ":" ,"(" + totalS_Man +
+		System.out.printf("%-15s %-5s %-4s %6.2f%%\n", "\tManhattan", ":" ,"(" + totalS_Man +
 				")" + totalMan, perMan );
-		System.out.printf("%-10s %-5s %-4s %6.2f%%\n", "\tBronx", ":" ,"(" + totalS_BX +
+		System.out.printf("%-15s %-5s %-7s %6.2f%%\n", "\tBronx", ":" ,"(" + totalS_BX +
 				")" + totalBX, perBX );
-		System.out.printf("%-10s %-5s %-4s %6.2f%%\n", "\tBrooklyn", ":" ,"(" + totalS_BK +
+		System.out.printf("%-15s %-5s %-4s %6.2f%%\n", "\tBrooklyn", ":" ,"(" + totalS_BK +
 				")" + totalBK, perBK );
-		System.out.printf("%-10s %-5s %-4s %6.2f%%\n", "\tQueens", ":" ,"(" + totalS_Q +
+		System.out.printf("%-15s %-5s %-4s %6.2f%%\n", "\tQueens", ":" ,"(" + totalS_Q +
 				")" + totalQ, perQ );
-		System.out.printf("%-10s %-5s %-4s %6.2f%%\n", "\tStaten Island", ":" ,"(" + totalS_SI +
+		System.out.printf("%-15s %-5s %-7s %6.2f%%\n", "\tStaten Island", ":" ,"(" + totalS_SI +
 				")" + totalSI, perSI );
 
 
@@ -241,66 +246,49 @@ public class NYCStreetTrees {
 		}
 	}
 
-	public static String fileToString(String filePath) throws IOException {
-		StringBuilder sb = new StringBuilder();
-		try {
-			BufferedReader buffer = new BufferedReader(new FileReader(filePath));
-			String s;
 
-			while ((s = buffer.readLine()) != null) {
-
-				sb.append(s).append("\n");
-			}
-			buffer.close();
-		}
-		catch (IOException e){
-			throw new IOException("File could not be read");
-		}
-
-		return sb.toString();
-	}
-
-	public static TreeList stringToTreeList( String fileString ) {
-		int treeCount = treeCount( fileString );
-		String[] line = fileString.split( "\n" );
+	public static TreeList fileToTreeList( String path ) throws FileNotFoundException {
+		File f = new File( path );
 		TreeList tl = new TreeList();
+		Node n = tl.head; 
 
-		for( int i = 0; i < treeCount; i++ ) {
-			String[] row = line[i].split(",");
+		CSV csv = new CSV( new Scanner(f) );
 
-			if( row[0].equals("tree_id") ) { // if first line, skip
-				continue;
-			}
-			int treeID = Integer.parseInt(row[0]); // Parse treeid to int
-			String commonName = row[9];
-			String latinName = row[8];
-			String status = row[6];
-			String health = row[7];
-			String zipcode = row[25];
-			String boro = row[29];
-			double x_sp = Double.parseDouble( row[39] );
-			double y_sp = Double.parseDouble( row[40] );
+		for (int i = 0; i < csv.getNumOfRows() - 1; i++ ) {
+			if( i == 0 ) csv.getNextRow();
+			ArrayList<String> line = csv.getNextRow();
+			TreeSpecies ts = new TreeSpecies( line.get(9), line.get(8) );
+			int id = 0;
+			int zipcode = 0;
+			double x_sp = 0; double y_sp = 0;
 
-
-			TreeSpecies ts = new TreeSpecies ( commonName, latinName );
-
-			Tree t = new Tree( treeID, ts );
-			t.setStatus( status );
-			t.setHealth( health );
 			try {
-				t.setZipcode( Integer.parseInt(zipcode) );
-			} catch (NumberFormatException nfe) {
+				id = Integer.parseInt(line.get(0));
+			} catch( NumberFormatException nfe) {}
 
-			}
+			Tree t = new Tree( id, ts );
+			t.setStatus(line.get(6));
+			t.setHealth(line.get(7));
 
-			t.setBoroName(boro);
-			t.setX_sp(x_sp);
-			t.setY_sp(y_sp);
+			try {
+				zipcode = Integer.parseInt(line.get(25));
+			} catch( NumberFormatException nfe) {}
+			t.setZipcode(zipcode);
+			t.setBoroname(line.get(29));
 
+			try {
+				x_sp = Double.parseDouble(line.get(39));
+			} catch( NumberFormatException nfe) {}
+
+			try {
+				y_sp = Double.parseDouble(line.get(40));
+			} catch( NumberFormatException nfe) {}
+			t.setX_sp(x_sp); t.setY_sp(y_sp);
 			tl.add(t);
 		}
 		return tl;
 	}
+
 
 	public static int treeCount(String fileString) {
 		String[] arr = fileString.split("\n");
